@@ -14,7 +14,11 @@ app.get("/status", (req, res) => {
       return res.status(500).json({ error: "Erro ao acessar o arquivo." });
     }
 
-    res.json({ tamanho: stats.size, unidade: "bytes" });
+    res.json({
+      tamanho: stats.size,
+      unidade: "bytes",
+      ultimaAtualizacao: stats.mtime,
+    });
   });
 });
 
