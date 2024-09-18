@@ -2,9 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const WebSocket = require("ws");
 
-const filePathBancoPequeno = ""; // adicionar o caminho aqui
-const filePathBancoCompleto = ""; // adicionar o caminho aqui
-const filePathEstrutura = ""; // adicionar o caminho aqui
+const filePathBancoPequeno = "/home/felipe/Downloads/bancoPequeno";
+const filePathBancoCompleto = "/home/felipe/Downloads/bancoCompleto";
+const filePathEstrutura = "/home/felipe/Downloads/estrutura";
 
 const absolutePathBancoPequeno = path.resolve(filePathBancoPequeno);
 const absolutePathBancoCompleto = path.resolve(filePathBancoCompleto);
