@@ -2,11 +2,21 @@ const express = require("express");
 const app = express();
 
 app.get("/status", (req, res) => {
-  const filePath = ""; // adicionar o caminho aqui
+  const filePathBancoPequeno = ""; // adicionar o caminho aqui
+  const filePathBancoCompleto = ""; // adicionar o caminho aqui
+  const filePathEstrutura = ""; // adicionar o caminho aqui
 
-  const absolutePath = path.resolve(filePath);
+  const absolutePathBancoPequeno = path.resolve(filePathBancoPequeno);
+  const absolutePathBancoCompleto = path.resolve(filePathBancoCompleto);
+  const absolutePathEstrutura = path.resolve(filePathEstrutura);
 
-  fs.stat(absolutePath, (err, stats) => {
+  const resposta = {
+    bancoPequeno: {},
+    bancoCompleto: {},
+    estrutura: {},
+  };
+
+  fs.stat(absolutePathBancoPequeno, (err, stats) => {
     if (err) {
       if (err.code === "ENOENT") {
         return res.status(404).json({ error: "Arquivo não encontrado." });
@@ -14,11 +24,41 @@ app.get("/status", (req, res) => {
       return res.status(500).json({ error: "Erro ao acessar o arquivo." });
     }
 
-    res.json({
+    resposta.bancoPequeno = {
       tamanho: stats.size,
       unidade: "bytes",
       ultimaAtualizacao: stats.mtime,
-    });
+    };
+  });
+
+  fs.stat(absolutePathBancoCompleto, (err, stats) => {
+    if (err) {
+      if (err.code === "ENOENT") {
+        return res.status(404).json({ error: "Arquivo não encontrado." });
+      }
+      return res.status(500).json({ error: "Erro ao acessar o arquivo." });
+    }
+
+    resposta.bancoCompleto = {
+      tamanho: stats.size,
+      unidade: "bytes",
+      ultimaAtualizacao: stats.mtime,
+    };
+  });
+
+  fs.stat(absolutePathEstrutura, (err, stats) => {
+    if (err) {
+      if (err.code === "ENOENT") {
+        return res.status(404).json({ error: "Arquivo não encontrado." });
+      }
+      return res.status(500).json({ error: "Erro ao acessar o arquivo." });
+    }
+
+    resposta.estrutura = {
+      tamanho: stats.size,
+      unidade: "bytes",
+      ultimaAtualizacao: stats.mtime,
+    };
   });
 });
 
