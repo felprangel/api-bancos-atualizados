@@ -60,6 +60,8 @@ app.get("/status", (req, res) => {
       ultimaAtualizacao: stats.mtime,
     };
   });
+
+  res.json(resposta);
 });
 
 app.listen(3333, () => {
