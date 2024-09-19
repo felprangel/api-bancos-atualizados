@@ -77,22 +77,22 @@ async function broadcastUpdates() {
   });
 }
 
-fs.watch(absolutePathBancoPequeno, (eventType) => {
-  if (eventType === "change") {
+fs.watchFile(absolutePathBancoPequeno, { interval: 500 }, (curr, prev) => {
+  if (curr.mtime !== prev.mtime) {
     console.log("Arquivo bancoPequeno alterado");
     broadcastUpdates();
   }
 });
 
-fs.watch(absolutePathBancoCompleto, (eventType) => {
-  if (eventType === "change") {
+fs.watchFile(absolutePathBancoCompleto, { interval: 500 }, (curr, prev) => {
+  if (curr.mtime !== prev.mtime) {
     console.log("Arquivo bancoCompleto alterado");
     broadcastUpdates();
   }
 });
 
-fs.watch(absolutePathEstrutura, (eventType) => {
-  if (eventType === "change") {
+fs.watchFile(absolutePathEstrutura, { interval: 500 }, (curr, prev) => {
+  if (curr.mtime !== prev.mtime) {
     console.log("Arquivo estrutura alterado");
     broadcastUpdates();
   }
