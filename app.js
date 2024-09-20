@@ -1,10 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const WebSocket = require("ws");
+require("dotenv").config();
 
-const filePathBancoPequeno = "/home/felipe/Downloads/bancoPequeno";
-const filePathBancoCompleto = "/home/felipe/Downloads/bancoCompleto";
-const filePathEstrutura = "/home/felipe/Downloads/estrutura";
+const filePathBancoPequeno = process.env.PATH_BANCO_PEQUENO;
+const filePathBancoCompleto = process.env.PATH_BANCO_COMPLETO;
+const filePathEstrutura = process.env.PATH_ESTRUTURA;
 
 const absolutePathBancoPequeno = path.resolve(filePathBancoPequeno);
 const absolutePathBancoCompleto = path.resolve(filePathBancoCompleto);
