@@ -25,7 +25,21 @@ wss.on("connection", (ws) => {
   });
 });
 
-function collectFileStats(filePath) {
+function determineFileState(stats) {
+  const now = new Date();
+  const lastModified = new Date(stats.mtime);
+  const timeDiff = (now - lastModified) / 1000;
+
+  if (lastModified.toDateString() !== now.toDateString()) {
+    return "anterior";
+  }
+  if (timeDiff > 30) {
+    return "atualizado";
+  }
+  return "atualizando";
+}
+
+async function collectFileStats(filePath) {
   return new Promise((resolve) => {
     fs.stat(filePath, (err, stats) => {
       if (err) {
@@ -35,10 +49,12 @@ function collectFileStats(filePath) {
         return resolve({ error: "Erro ao acessar o arquivo." });
       }
 
+      const estado = determineFileState(stats);
       resolve({
         tamanho: stats.size,
         unidade: "bytes",
         ultimaAtualizacao: stats.mtime,
+        estado: estado,
       });
     });
   });
