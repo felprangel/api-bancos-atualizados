@@ -11,6 +11,10 @@ const absolutePathBancoPequeno = path.resolve(filePathBancoPequeno);
 const absolutePathBancoCompleto = path.resolve(filePathBancoCompleto);
 const absolutePathEstrutura = path.resolve(filePathEstrutura);
 
+let timeoutIdPequeno;
+let timeoutIdCompleto;
+let timeoutIdEstrutura;
+
 const wss = new WebSocket.Server({ port: 3333 }, () => {
   console.log("Servidor WebSocket ouvindo na porta 3333");
 });
@@ -97,20 +101,47 @@ async function broadcastUpdates() {
 fs.watchFile(absolutePathBancoPequeno, { interval: 500 }, (curr, prev) => {
   if (curr.mtime !== prev.mtime) {
     console.log("Arquivo bancoPequeno alterado");
-    broadcastUpdates();
+    if (timeoutIdPequeno) {
+      clearTimeout(timeoutIdPequeno);
+    } else {
+      broadcastUpdates();
+    }
+
+    timeoutIdPequeno = setTimeout(() => {
+      console.log("Arquivo pronto");
+      broadcastUpdates();
+    }, 30000); // 30 segundos
   }
 });
 
 fs.watchFile(absolutePathBancoCompleto, { interval: 500 }, (curr, prev) => {
   if (curr.mtime !== prev.mtime) {
     console.log("Arquivo bancoCompleto alterado");
-    broadcastUpdates();
+    if (timeoutIdCompleto) {
+      clearTimeout(timeoutIdCompleto);
+    } else {
+      broadcastUpdates();
+    }
+
+    timeoutIdCompleto = setTimeout(() => {
+      console.log("Arquivo pronto");
+      broadcastUpdates();
+    }, 30000); // 30 segundos
   }
 });
 
 fs.watchFile(absolutePathEstrutura, { interval: 500 }, (curr, prev) => {
   if (curr.mtime !== prev.mtime) {
     console.log("Arquivo estrutura alterado");
-    broadcastUpdates();
+    if (timeoutIdEstrutura) {
+      clearTimeout(timeoutIdEstrutura);
+    } else {
+      broadcastUpdates();
+    }
+
+    timeoutIdEstrutura = setTimeout(() => {
+      console.log("Arquivo pronto");
+      broadcastUpdates();
+    }, 30000); // 30 segundos
   }
 });
