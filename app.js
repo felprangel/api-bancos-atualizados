@@ -126,7 +126,7 @@ fs.watchFile(absolutePathBancoCompleto, { interval: 500 }, (curr, prev) => {
     timeoutIdCompleto = setTimeout(() => {
       console.log("Arquivo pronto");
       broadcastUpdates();
-    }, 30000); // 30 segundos
+    }, 120000); // 2 min
   }
 });
 
@@ -142,6 +142,6 @@ fs.watchFile(absolutePathEstrutura, { interval: 500 }, (curr, prev) => {
     timeoutIdEstrutura = setTimeout(() => {
       console.log("Arquivo pronto");
       broadcastUpdates();
-    }, 30000); // 30 segundos
+    }, 10000); // 10 segundos
   }
 });
