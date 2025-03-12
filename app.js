@@ -37,7 +37,7 @@ function determineFileState(stats) {
   if (lastModified.toDateString() !== now.toDateString()) {
     return "anterior";
   }
-  if (timeDiff > 30) {
+  if (timeDiff > 10) {
     return "atualizado";
   }
   return "atualizando";
@@ -110,7 +110,7 @@ fs.watchFile(absolutePathBancoPequeno, { interval: 500 }, (curr, prev) => {
     timeoutIdPequeno = setTimeout(() => {
       console.log("Arquivo pronto");
       broadcastUpdates();
-    }, 30000); // 30 segundos
+    }, 30000); // 30 seg
   }
 });
 
@@ -126,7 +126,7 @@ fs.watchFile(absolutePathBancoCompleto, { interval: 500 }, (curr, prev) => {
     timeoutIdCompleto = setTimeout(() => {
       console.log("Arquivo pronto");
       broadcastUpdates();
-    }, 30000); // 30 segundos
+    }, 240000); // 4 min
   }
 });
 
@@ -142,6 +142,6 @@ fs.watchFile(absolutePathEstrutura, { interval: 500 }, (curr, prev) => {
     timeoutIdEstrutura = setTimeout(() => {
       console.log("Arquivo pronto");
       broadcastUpdates();
-    }, 30000); // 30 segundos
+    }, 10000); // 10 seg
   }
 });
