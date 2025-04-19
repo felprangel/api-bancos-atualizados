@@ -5,14 +5,17 @@ require("dotenv").config();
 
 const filePathBancoPequeno = process.env.PATH_BANCO_PEQUENO;
 const filePathBancoCompleto = process.env.PATH_BANCO_COMPLETO;
+const filePathBancoUsersApi = process.env.PATH_BANCO_USERS_API;
 const filePathEstrutura = process.env.PATH_ESTRUTURA;
 
 const absolutePathBancoPequeno = path.resolve(filePathBancoPequeno);
 const absolutePathBancoCompleto = path.resolve(filePathBancoCompleto);
+const absolutePathBancoUsersApi = path.resolve(filePathBancoUsersApi);
 const absolutePathEstrutura = path.resolve(filePathEstrutura);
 
 let timeoutIdPequeno;
 let timeoutIdCompleto;
+let timeoutIdUsersApi;
 let timeoutIdEstrutura;
 
 const wss = new WebSocket.Server({ port: 3333 }, () => {
@@ -68,11 +71,13 @@ async function sendUpdates(ws) {
   const resposta = {
     bancoPequeno: {},
     bancoCompleto: {},
+    bancoUsersApi: {},
     estrutura: {},
   };
 
   resposta.bancoPequeno = await collectFileStats(absolutePathBancoPequeno);
   resposta.bancoCompleto = await collectFileStats(absolutePathBancoCompleto);
+  resposta.bancoUsersApi = await collectFileStats(absolutePathBancoUsersApi);
   resposta.estrutura = await collectFileStats(absolutePathEstrutura);
 
   ws.send(JSON.stringify(resposta));
@@ -82,11 +87,13 @@ async function broadcastUpdates() {
   const resposta = {
     bancoPequeno: {},
     bancoCompleto: {},
+    bancoUsersApi: {},
     estrutura: {},
   };
 
   resposta.bancoPequeno = await collectFileStats(absolutePathBancoPequeno);
   resposta.bancoCompleto = await collectFileStats(absolutePathBancoCompleto);
+  resposta.bancoUsersApi = await collectFileStats(absolutePathBancoUsersApi);
   resposta.estrutura = await collectFileStats(absolutePathEstrutura);
 
   const message = JSON.stringify(resposta);
@@ -140,6 +147,22 @@ fs.watchFile(absolutePathEstrutura, { interval: 500 }, (curr, prev) => {
     }
 
     timeoutIdEstrutura = setTimeout(() => {
+      console.log("Arquivo pronto");
+      broadcastUpdates();
+    }, 10000); // 10 seg
+  }
+});
+
+fs.watchFile(absolutePathBancoUsersApi, { interval: 500 }, (curr, prev) => {
+  if (curr.mtime !== prev.mtime) {
+    console.log("Arquivo bancoUsersApi alterado");
+    if (timeoutIdUsersApi) {
+      clearTimeout(timeoutIdUsersApi);
+    } else {
+      broadcastUpdates();
+    }
+
+    timeoutIdUsersApi = setTimeout(() => {
       console.log("Arquivo pronto");
       broadcastUpdates();
     }, 10000); // 10 seg
